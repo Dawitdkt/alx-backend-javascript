@@ -26,7 +26,6 @@ function countStudents(path) {
       const count = students.length;
       const list = students.join(', ');
       totalStudents += count;
-      //console.log(`Number of students in ${field}: ${count}. List: ${list}`);
     });
 
     console.log(`Number of students: ${totalStudents}`);
