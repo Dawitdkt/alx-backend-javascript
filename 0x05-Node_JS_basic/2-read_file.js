@@ -3,23 +3,43 @@ const fs = require('fs');
 function countStudents(path) {
   try {
     const data = fs.readFileSync(path, 'utf8');
-    const lines = data.split('\n').filter((line) => line.trim() !== '');
-    const numberOfStudents = lines.length - 1;
-    const fields = lines[0].split(',');
+    const lines = data.trim().split('\n');
+    const studentsByField = {};
 
-    console.log(`Number of students: ${numberOfStudents}`);
+    lines.forEach((line) => {
+      const [firstName, lastName, age, field] = line.split(',');
+      if (firstName && lastName && field && firstName != 'firstname') {
+        if (studentsByField[field]) {
+          studentsByField[field].push(firstName);
+        } else {
+          studentsByField[field] = [firstName];
+        }
+      }
+    });
 
-    for (let i = 0; i < fields.length; i++) {
-      const field = fields[i];
-      const students = lines.slice(1).map((line) => line.split(',')[i]);
-      const filteredStudents = students.filter((student) => student.trim() !== '');
+    const fields = Object.keys(studentsByField).sort((a, b) =>
+      a.localeCompare(b)
+    );
+    let totalStudents = 0;
+    fields.forEach((field) => {
+      const students = studentsByField[field];
+      const count = students.length;
+      const list = students.join(', ');
+      totalStudents += count;
+      //console.log(`Number of students in ${field}: ${count}. List: ${list}`);
+    });
 
-      console.log(`Number of students in ${field}: ${filteredStudents.length}. List: ${filteredStudents.join(', ')}`);
-    }
+    console.log(`Number of students: ${totalStudents}`);
+    fields.forEach((field) => {
+      const students = studentsByField[field];
+      const count = students.length;
+      const list = students.join(', ');
+      totalStudents += count;
+      console.log(`Number of students in ${field}: ${count}. List: ${list}`);
+    });
   } catch (error) {
     throw new Error('Cannot load the database');
   }
 }
 
-// Example usage
-countStudents('database.csv');
+module.exports = countStudents;
