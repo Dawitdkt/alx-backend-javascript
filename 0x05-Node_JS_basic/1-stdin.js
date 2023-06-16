@@ -3,7 +3,7 @@ process.stdout.write('Welcome to Holberton School, what is your name?\n');
 process.stdin.once('data', (data) => {
   const name = data.toString().trim();
   process.stdout.write(`Your name is: ${name}\n`);
-  process.stdout.end();
+  process.stdin.end();
 });
 
 process.stdin.once('end', () => {
