@@ -10,7 +10,7 @@ process.stdin.on('data', (input) => {
     process.exit();
   } else {
     console.log(`Your name is: ${name}`);
-    console.log('Welcome to Holberton School, what is your name?');
+    process.exit();
   }
 });
 
